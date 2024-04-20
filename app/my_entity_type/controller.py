@@ -23,6 +23,7 @@ from app.speckle_functions import get_speckle_lighting_names
 
 PROJECT_LOCATION = MapPoint(41.390608, 2.177505)
 
+
 def haversine_distance(coord1, coord2):
     """
     Calculate the Haversine distance between two latitude-longitude coordinates.
@@ -58,8 +59,6 @@ def haversine_distance(coord1, coord2):
     return distance
 
 
-
-
 def get_distance_to_project_location(params, **kwargs):
     if params.constructor_location:
         return f"{haversine_distance(params.constructor_location, PROJECT_LOCATION):.0f} km"
@@ -67,9 +66,11 @@ def get_distance_to_project_location(params, **kwargs):
 
 
 class Parametrization(ViktorParametrization):
-    welcome = Text("Welcome to the open bidding application! Please start by filling in the location of your distribution"
-                   " facility, and your distance to the project will be calculated. Then proceed by filling your price estimate "
-                   "for each of the different items.")
+    welcome = Text(
+        "Welcome to the open bidding application! Please start by filling in the location of your distribution"
+        " facility, and your distance to the project will be calculated. Then proceed by filling your price estimate "
+        "for each of the different items."
+    )
     constructor_header = Text("# Location")
     constructor_location = GeoPointField("Constructor location")
     distance_to_project = OutputField("Distance to project", value=get_distance_to_project_location)
@@ -89,7 +90,7 @@ class Parametrization(ViktorParametrization):
 
 
 class Controller(ViktorController):
-    label = 'Bid'
+    label = "Bid"
     parametrization = Parametrization
 
     @MapAndDataView("Constructor location", duration_guess=1)
@@ -100,12 +101,24 @@ class Controller(ViktorController):
 
         concrete_data = get_speckle_concrete_volume_dataframe()
         lighting_data = get_speckle_lighting_dataframe()
-        return MapAndDataResult(features=map_elements, data=DataGroup(
-            DataItem("Concrete", value=f"{concrete_data.sum():.0f}", suffix="m³", subgroup=DataGroup(
-                *(DataItem(key, value=f"{value:.0f}", suffix="m³") for key, value in concrete_data.items())
-            )),
-            DataItem("Lighting", value=f"{lighting_data.sum():.0f}", suffix="pieces", subgroup=DataGroup(
-                *(DataItem(key, value=f"{value:.0f}", suffix="pieces") for key, value in lighting_data.items())
-            ))
-        ))
-
+        return MapAndDataResult(
+            features=map_elements,
+            data=DataGroup(
+                DataItem(
+                    "Concrete",
+                    value=f"{concrete_data.sum():.0f}",
+                    suffix="m³",
+                    subgroup=DataGroup(
+                        *(DataItem(key, value=f"{value:.0f}", suffix="m³") for key, value in concrete_data.items())
+                    ),
+                ),
+                DataItem(
+                    "Lighting",
+                    value=f"{lighting_data.sum():.0f}",
+                    suffix="pieces",
+                    subgroup=DataGroup(
+                        *(DataItem(key, value=f"{value:.0f}", suffix="pieces") for key, value in lighting_data.items())
+                    ),
+                ),
+            ),
+        )

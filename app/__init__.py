@@ -1,8 +1,6 @@
-from .my_folder.controller import Controller as MyFolder
-from .my_entity_type.controller import Controller as MyEntityType
-
 from viktor import InitialEntity
 
-initial_entities = [
-    InitialEntity('MyFolder', name='AEC Tech Project')
-]
+from .my_entity_type.controller import Controller as MyEntityType
+from .my_folder.controller import Controller as MyFolder
+
+initial_entities = [InitialEntity("MyFolder", name="AEC Tech Project")]

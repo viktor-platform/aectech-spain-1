@@ -11,6 +11,7 @@ stream_id = os.environ["SPECKLE_STREAM_ID"]
 client = SpeckleClient(host="https://app.speckle.systems")
 client.authenticate_with_token(speckle_api_key)
 
+
 def get_speckle_models(**kwargs):
     branches = client.branch.list(stream_id=stream_id)
     branch_names = [branche.name for branche in branches if branche.name != "main"]
@@ -47,7 +48,7 @@ def push_prices_to_speckle(branch_name: str, prices_dict: dict[str, dict[str, fl
         branch_name=branch_name,
         object_id=new_object_id,
         message="Update from viktor app",
-        source_application="viktor"
+        source_application="viktor",
     )
     print(f"new commit id {commit_id}")
 
