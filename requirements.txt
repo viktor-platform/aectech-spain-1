@@ -1,0 +1,4 @@
+viktor==14.9.0
+ifcopenshell
+specklepy
+plotly
